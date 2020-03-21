@@ -4,7 +4,13 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Stack {
-        Stack { memory: 0 }
+        Stack {
+            memory: Vec::<u16>::new(),
+        }
+    }
+
+    pub fn push(&mut self, value: u16) {
+        self.memory.push(value);
     }
 
     pub fn pop(&mut self) -> u16 {

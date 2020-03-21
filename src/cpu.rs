@@ -52,8 +52,8 @@ impl CPU {
                     screen.clear();
                 }
                 0x0EE => {
-                    pc = self.stack.pop();
-                    self.counter.jump(pc);
+                    let new_pc = self.stack.pop();
+                    self.counter.jump(new_pc);
                 }
                 _ => panic!("Unrecognized instruction: {:#X}", opcode),
             },
@@ -63,6 +63,8 @@ impl CPU {
             }
             0x2 => {
                 // call subroutine at NNN
+                self.stack.push(pc);
+                self.counter.jump(nnn);
             }
             0x3 => {
                 // Skip next instruction if VX == NN
