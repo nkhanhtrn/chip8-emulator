@@ -16,9 +16,13 @@ impl CHIP8 {
     }
     pub fn run_program(&mut self, program: &Vec<u8>) {
         for i in 0..program.len() {
+            println!("{:#X}", program[i]);
             self.ram
                 .write_byte(cpu::PROGRAM_START + (i as u16), program[i]);
         }
-        self.cpu.run_instruction(&self.ram);
+
+        loop {
+            self.cpu.run_instruction(&self.ram);
+        }
     }
 }

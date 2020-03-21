@@ -1,11 +1,17 @@
 use crate::chip8::CHIP8;
+use std::fs::File;
+use std::io::Read;
 
 mod chip8;
 mod cpu;
 mod ram;
+mod register;
 
 fn main() {
+    let mut file = File::open("ROMs/PONG").unwrap();
+    let mut data = Vec::<u8>::new();
+    file.read_to_end(&mut data);
+
     let mut chip8 = CHIP8::new();
-    let mut program = vec![0x13, 0xC5];
-    chip8.run_program(&mut program);
+    chip8.run_program(&data);
 }
