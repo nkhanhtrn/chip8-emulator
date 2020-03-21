@@ -3,9 +3,13 @@ use std::fs::File;
 use std::io::Read;
 
 mod chip8;
+mod counter;
 mod cpu;
+mod input;
+mod keyboard;
 mod ram;
 mod register;
+mod screen;
 
 fn main() {
     let mut file = File::open("ROMs/PONG").unwrap();
