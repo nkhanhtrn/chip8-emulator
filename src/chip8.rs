@@ -1,10 +1,14 @@
 use crate::cpu;
 use crate::cpu::CPU;
+use crate::keyboard::Keyboard;
 use crate::ram::RAM;
+use crate::screen::Screen;
 
 pub struct CHIP8 {
     cpu: CPU,
     ram: RAM,
+    keyboard: Keyboard,
+    screen: Screen,
 }
 
 impl CHIP8 {
@@ -12,6 +16,8 @@ impl CHIP8 {
         CHIP8 {
             cpu: CPU::new(),
             ram: RAM::new(),
+            keyboard: Keyboard::new(),
+            screen: Screen::new(),
         }
     }
     pub fn run_program(&mut self, program: &Vec<u8>) {
@@ -21,7 +27,8 @@ impl CHIP8 {
         }
 
         loop {
-            self.cpu.run_instruction(&self.ram);
+            self.cpu
+                .run_instruction(&self.ram, &mut self.screen, &mut self.keyboard);
         }
     }
 }

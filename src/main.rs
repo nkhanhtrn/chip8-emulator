@@ -10,6 +10,7 @@ mod keyboard;
 mod ram;
 mod register;
 mod screen;
+mod stack;
 
 fn main() {
     let mut file = File::open("ROMs/PONG").unwrap();

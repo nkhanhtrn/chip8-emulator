@@ -3,6 +3,8 @@ use crate::input::Input;
 use crate::keyboard::Keyboard;
 use crate::ram::RAM;
 use crate::register::Register;
+use crate::screen::Screen;
+use crate::stack::Stack;
 use rand::Rng;
 
 pub const PROGRAM_START: u16 = 0x200;
@@ -10,9 +12,8 @@ pub const PROGRAM_START: u16 = 0x200;
 pub struct CPU {
     register: Register,
     input: Input,
-    keyboard: Keyboard,
     counter: ProgramCounter,
-    sp: u8,
+    stack: Stack,
 }
 
 impl CPU {
@@ -20,13 +21,12 @@ impl CPU {
         CPU {
             register: Register::new(),
             input: Input::new(),
-            keyboard: Keyboard::new(),
             counter: ProgramCounter::new(),
-            sp: 0,
+            stack: Stack::new(),
         }
     }
 
-    pub fn run_instruction(&mut self, ram: &RAM) {
+    pub fn run_instruction(&mut self, ram: &RAM, screen: &mut Screen, keyboard: &mut Keyboard) {
         let pc = self.counter.read();
         let hi = ram.read_byte(pc) as u16;
         let lo = ram.read_byte(pc + 1) as u16;
@@ -48,8 +48,13 @@ impl CPU {
 
         match opcode {
             0x00 => match nnn {
-                0x0E0 => {}
-                0x0EE => {}
+                0x0E0 => {
+                    screen.clear();
+                }
+                0x0EE => {
+                    pc = self.stack.pop();
+                    self.counter.jump(pc);
+                }
                 _ => panic!("Unrecognized instruction: {:#X}", opcode),
             },
             0x1 => {
@@ -160,17 +165,19 @@ impl CPU {
                 let random_num = randomize.gen_range(0, 256) as u8;
                 self.register.set(x, random_num & nn)
             }
-            0xD => {}
+            0xD => {
+                screen.draw_byte(n, vx, vy);
+            }
             0xE => match nn {
                 // Skips if key press == vx
                 0x9E => {
-                    if self.keyboard.key_press(vx) {
+                    if keyboard.key_press(vx) {
                         self.counter.skip();
                     }
                 }
                 // Skips if key press !!= vx
                 0xA1 => {
-                    if !self.keyboard.key_press(vx) {
+                    if !keyboard.key_press(vx) {
                         self.counter.skip();
                     }
                 }

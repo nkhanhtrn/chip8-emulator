@@ -10,8 +10,4 @@ impl Input {
     pub fn set(&mut self, value: u16) {
         self.key = value;
     }
-
-    pub fn key_press(&mut self, key: u16) -> bool {
-        self.key == key
-    }
 }
