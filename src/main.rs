@@ -1,8 +1,11 @@
-use ram::RAM;
-use cpu::CPU;
+use crate::chip8::CHIP8;
+
+mod chip8;
+mod cpu;
+mod ram;
 
 fn main() {
-    let cpu = CPU::new();
+    let mut chip8 = CHIP8::new();
     let mut program = vec![0x13, 0xC5];
-    cpu.run_program(&mut program);
+    chip8.run_program(&mut program);
 }
