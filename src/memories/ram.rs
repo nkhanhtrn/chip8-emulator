@@ -11,6 +11,10 @@ impl RAM {
         ram
     }
 
+    pub fn memory(&self) -> *const u8 {
+        self.memory.as_ptr()
+    }
+
     fn add_font(&mut self) {
         let sprites = [
             CHAR_0, CHAR_1, CHAR_2, CHAR_3,

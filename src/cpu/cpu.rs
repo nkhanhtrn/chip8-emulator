@@ -145,11 +145,9 @@ impl CPU {
             },
             (0xD, _, _, _) => {
                 let sprite = self.ram.read_bytes(self.register_i.get(), ins.n as u16);
-                let is_collision = self.screen.draw(sprite, vx as isize, vy as isize);
+                let is_collision = self.screen.draw(sprite, vx, vy);
                 if is_collision {
                     self.register.carry_bit_on();
-                } else {
-                    self.register.carry_bit_off();
                 }
             },
             /*
