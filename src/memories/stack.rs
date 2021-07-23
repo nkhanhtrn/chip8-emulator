@@ -14,7 +14,7 @@ impl Stack {
         }
     }
 
-    pub fn push(&mut self, value: u16) -> Result<(), &str> {
+    pub fn push(&mut self, value: u16) -> Result<(), &'static str> {
         if self.memory.len() == LIMIT {
             return Err("stack is full");
         }
